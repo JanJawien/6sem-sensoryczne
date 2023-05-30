@@ -22,23 +22,23 @@ int lm35Value;
 
 void setup() { 
   Serial.begin(9600);
-  Serial.println("Begin setup()");
+  // Serial.println("Begin setup()");
   
   ////////////// Begin Initialize MAX30102 ///////////////
-  Serial.println("Begin Init MAX30102");
+  // Serial.println("Begin Init MAX30102");
   while(!MAX30102.begin())
   {
-    Serial.println("Init failed, retry in 5s");
+    // Serial.println("Init failed, retry in 5s");
     delay(5000);
   }
-  Serial.println("Init success!");
+  // Serial.println("Init success!");
   
   MAX30102.sensorStartCollect();
   
-  Serial.println("End Init MAX30102");
+  // Serial.println("End Init MAX30102");
   //////////////  End Initialize MAX30102  ///////////////
 
-  Serial.println("End setup()");
+  // Serial.println("End setup()");
 }
 
 void loop() { 
