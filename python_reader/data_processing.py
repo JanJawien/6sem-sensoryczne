@@ -1,13 +1,43 @@
 import json
+import serial
+import time
+from datetime import datetime
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 BASIC_SPO2_LEVEL = 97
 BASIC_TEMP_VALUE = 36.6
+DATA_ACQUISITION_TIME_S = 10  # 10
+SERIAL_INTERFACE = "COM4"
 
-with open('data.json') as file:
-    data = json.load(file)
+data = []
+if DATA_ACQUISITION_TIME_S <= 0:
+    # Reading data from file
+    with open('data.json') as file:
+        data = json.load(file)
+
+else:
+    # Reading data from Arduino serial
+    try:
+        com = serial.Serial(SERIAL_INTERFACE, 9600, timeout=1)
+    except serial.SerialException:
+        print("Serial connection on", SERIAL_INTERFACE, "cannot be opened")
+        exit()
+
+    time.sleep(1)
+    print("Serial connection open")
+    end_timestamp = datetime.now().timestamp() + DATA_ACQUISITION_TIME_S
+
+    print("Reading data for", DATA_ACQUISITION_TIME_S, "seconds...")
+    while end_timestamp - datetime.now().timestamp() > 0:
+        line = com.readline()
+        data.append(json.loads(line))
+
+    print("Serial connection closed")
+    com.close()
+
+
 
 lm35_temp_list = []
 max_temp_list = []
