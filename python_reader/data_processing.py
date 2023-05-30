@@ -31,8 +31,11 @@ else:
 
     print("Reading data for", DATA_ACQUISITION_TIME_S, "seconds...")
     while end_timestamp - datetime.now().timestamp() > 0:
-        line = com.readline()
-        data.append(json.loads(line))
+        try:
+            line = com.readline()
+            data.append(json.loads(line))
+        except UnicodeDecodeError:
+            continue
 
     print("Serial connection closed")
     com.close()
