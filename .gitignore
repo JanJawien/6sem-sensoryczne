@@ -1,2 +1,2 @@
 .vscode
-python_reader\libs\*\*
+python_reader/libs/*/*
