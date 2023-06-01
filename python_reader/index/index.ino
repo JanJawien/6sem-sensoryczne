@@ -1,4 +1,5 @@
 #include "DFRobot_BloodOxygen_S.h"
+#include <Adafruit_LSM6DS3TRC.h>
 
 // Initialize Pulsoximeter - MAX30102 with I2C
 #define I2C_COMMUNICATION 
@@ -14,37 +15,62 @@
   #endif
 #endif
 
+Adafruit_LSM6DS3TRC lsm6ds3trc;
+
+
 int tempPin = A0; // Temperature sensor - LM35-DZ
 
 int lm35Value; 
+sensors_event_t accel;
+sensors_event_t gyro;
+sensors_event_t temp;
 
 
 
 void setup() { 
   Serial.begin(9600);
-  // Serial.println("Begin setup()");
+  Serial.println("Begin setup()");
   
   ////////////// Begin Initialize MAX30102 ///////////////
-  // Serial.println("Begin Init MAX30102");
+  Serial.println("Begin Init MAX30102");
   while(!MAX30102.begin())
   {
-    // Serial.println("Init failed, retry in 5s");
+    Serial.println("Init failed, retry in 5s");
     delay(5000);
   }
-  // Serial.println("Init success!");
+  Serial.println("Init success!");
   
   MAX30102.sensorStartCollect();
   
-  // Serial.println("End Init MAX30102");
+  Serial.println("End Init MAX30102");
   //////////////  End Initialize MAX30102  ///////////////
 
-  // Serial.println("End setup()");
+  ////////////// Start Initialize LSM6DS3TR-C ///////////////
+  Serial.println("Start Init LSM6DS3TR-C");
+
+  if (!lsm6ds3trc.begin_I2C()) {
+    Serial.println("Failed to find LSM6DS3TR-C chip");
+    while (1) {
+      delay(10);
+    }
+  }
+  Serial.println("LSM6DS3TR-C Found!");
+
+  lsm6ds3trc.configInt1(false, false, true); // accelerometer DRDY on INT1
+  lsm6ds3trc.configInt2(false, true, false); // gyro DRDY on INT2
+
+  Serial.println("End Init LSM6DS3TR-C");
+  //////////////  End Initialize LSM6DS3TR-C  ///////////////
+
+  Serial.println("End setup()");
 }
 
 void loop() { 
   //// Read values form sensors
   lm35Value = analogRead(tempPin);
   MAX30102.getHeartbeatSPO2();
+  
+  lsm6ds3trc.getEvent(&accel, &gyro, &temp);
 
 
 
@@ -57,6 +83,14 @@ void loop() {
   Serial.print(MAX30102._sHeartbeatSPO2.SPO2);
   Serial.print("\",\"max_bpm\":\"");
   Serial.print(MAX30102._sHeartbeatSPO2.Heartbeat);
+  Serial.print("\",\"ada_temp\":\"");
+  Serial.print(temp.temperature);    
+  Serial.print("\",\"ada_x\":\"");
+  Serial.print(accel.acceleration.x);    
+  Serial.print("\",\"ada_y\":\"");
+  Serial.print(accel.acceleration.y);
+  Serial.print("\",\"ada_z\":\"");
+  Serial.print(accel.acceleration.z);
   Serial.println("\"}");
 
 
