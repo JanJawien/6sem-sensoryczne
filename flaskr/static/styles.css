@@ -1,0 +1,56 @@
+/* styles.css */
+
+.main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+    background: floralwhite;
+}
+
+table {
+    width: 50%;
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th:nth-child(even) {
+    background-color: #ceceef;
+}
+
+th:nth-child(odd) {
+    background-color: #b6c1ea;
+}
+
+tr:nth-child(even) {
+    background-color: #e1e9f3;
+}
+
+tr:nth-child(odd) {
+    background-color: #e8e8f2;
+}
+
+.plots {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.plot {
+    max-width: 400px;
+    max-height: 400px;
+    padding: 5px;
+}
+
+.title {
+    text-align: center;
+}

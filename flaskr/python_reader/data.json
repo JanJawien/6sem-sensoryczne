@@ -1,0 +1,9 @@
+[
+  {"lm35_temp": "38", "max_temp":  "28.4", "max_spo2":  "90", "max_bpm":  "116", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "37.7", "max_temp":  "26.4", "max_spo2":  "91", "max_bpm":  "115", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "37.4", "max_temp":  "26.6", "max_spo2":  "91", "max_bpm":  "115", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "37", "max_temp":  "27.8", "max_spo2":  "92", "max_bpm":  "113", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "36.9", "max_temp":  "26.9", "max_spo2":  "92", "max_bpm":  "113", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "37.8", "max_temp":  "27.9", "max_spo2":  "91", "max_bpm":  "114", "x":  1, "y":  1, "z":  1},
+  {"lm35_temp": "37.7", "max_temp":  "26.6", "max_spo2":  "90", "max_bpm":  "114", "x":  1, "y":  1, "z":  1}
+]
