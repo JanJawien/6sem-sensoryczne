@@ -25,6 +25,12 @@ sensors_event_t accel;
 sensors_event_t gyro;
 sensors_event_t temp;
 
+const int ADA_BATCH_SIZE = 10;
+float ada_temp[ADA_BATCH_SIZE];
+float ada_x[ADA_BATCH_SIZE];
+float ada_y[ADA_BATCH_SIZE];
+float ada_z[ADA_BATCH_SIZE];
+
 
 
 void setup() { 
@@ -70,7 +76,16 @@ void loop() {
   lm35Value = analogRead(tempPin);
   MAX30102.getHeartbeatSPO2();
   
-  lsm6ds3trc.getEvent(&accel, &gyro, &temp);
+  for(int i=0; i<ADA_BATCH_SIZE; ++i){
+    lsm6ds3trc.getEvent(&accel, &gyro, &temp);
+    ada_temp[i] = temp.temperature;
+    ada_x[i] = accel.acceleration.x  ;  
+    ada_y[i] = accel.acceleration.y  ;  
+    ada_z[i] = accel.acceleration.z    ;
+    
+    delay(4000/ADA_BATCH_SIZE); // 4000/200 = 20[ms] // 50fps
+  }
+
 
 
 
@@ -83,18 +98,19 @@ void loop() {
   Serial.print(MAX30102._sHeartbeatSPO2.SPO2);
   Serial.print("\",\"max_bpm\":\"");
   Serial.print(MAX30102._sHeartbeatSPO2.Heartbeat);
-  Serial.print("\",\"ada_temp\":\"");
-  Serial.print(temp.temperature);    
-  Serial.print("\",\"ada_x\":\"");
-  Serial.print(accel.acceleration.x);    
-  Serial.print("\",\"ada_y\":\"");
-  Serial.print(accel.acceleration.y);
-  Serial.print("\",\"ada_z\":\"");
-  Serial.print(accel.acceleration.z);
-  Serial.println("\"}");
+  
+  Serial.print("\",\"ada_temp\":[");
+  for(int i=0; i<ADA_BATCH_SIZE; ++i) Serial.print((String)"\""+ada_temp[i]+"\",");    
+  Serial.print("],\"ada_x\":[");
+  for(int i=0; i<ADA_BATCH_SIZE; ++i) Serial.print((String)"\""+ada_x[i]+"\",");
+  Serial.print("],\"ada_y\":[");
+  for(int i=0; i<ADA_BATCH_SIZE; ++i) Serial.print((String)"\""+ada_y[i]+"\",");
+  Serial.print("],\"ada_z\":[");
+  for(int i=0; i<ADA_BATCH_SIZE; ++i) Serial.print((String)"\""+ada_z[i]+"\",");
+  Serial.println("]}");
 
 
 
   //// Rest and repeat
-  delay(500); 
+  delay(20); 
 }
