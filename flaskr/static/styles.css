@@ -9,16 +9,21 @@
     background: floralwhite;
 }
 
+.tables {
+    display: flex;
+    align-content: space-around;
+}
+
 table {
     width: 50%;
     margin-top: 50px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 50px;
+    margin-right: 50px;
     border-collapse: collapse;
 }
 
 th, td {
-    padding: 8px;
+    padding: 4px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
@@ -43,6 +48,7 @@ tr:nth-child(odd) {
     display: flex;
     align-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .plot {
