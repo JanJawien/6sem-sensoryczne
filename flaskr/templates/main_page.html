@@ -3,32 +3,41 @@
 <head>
     <title>Table Example</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='track_changes.js') }}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body class="main-container">
-    <table>
-        <thead>
+    <div class="tables">
+        <table id="xyz-table">
+            <thead>
             <tr>
-                {% for header in headers %}
+                {% for header in header_xyz %}
                 <th>{{ header }}</th>
                 {% endfor %}
             </tr>
-        </thead>
-        <tbody>
-            {% for row in data %}
+            </thead>
+            <tbody id="xyz-body"></tbody>
+        </table>
+        <table id="max-table">
+            <thead>
             <tr>
-                {% for value in row %}
-                <td>{{ value }}</td>
+                {% for header in header_max %}
+                <th>{{ header }}</th>
                 {% endfor %}
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h2 class="title">Plots</h2>
-    <div class="plots">
-        <img class="plot" src="data:image/png;base64,{{ plot_data1 }}" alt="Plot 1">
-        <img class="plot" src="data:image/png;base64,{{ plot_data2 }}" alt="Plot 2">
+            </thead>
+            <tbody id="max-body"></tbody>
+        </table>
+        <div class="plots">
+            <h2 class="title">Plots</h2>
+            <img class="plot" src="data:image/png;base64,{{ plot_data1 }}" alt="Plot 1">
+            <img class="plot" src="data:image/png;base64,{{ plot_data2 }}" alt="Plot 2">
+            <img class="plot" id="plot-image" src="" alt="Plot">
+        </div>
     </div>
+
+
 
 </body>
 </html>
