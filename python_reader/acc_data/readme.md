@@ -12,6 +12,8 @@ Zapisane jako np.ndarray - surowe dane z Arduino
 `data_tetno1.pkl` - samo tętno, brak oddechu
 `test.pkl` - ruch akcelerometrem najpierw w osi X, potem Y, potem Z, potem w kółku po wszystkich wymiarach  
 
+`data_dlugieX.pkl` - każdy zestaw obejmuje 3 minuty, wraz z pulsoksymetrem - 4. najbardziej wirygodny bo pulsoksymetr był najdłużej używany
+
 Oś X była skierowana od środka klatki w stronę lewego ramienia
 Oś Y była skierowana od środka klatki w stronę głowy
 Oś Z była skierowana pionowo
