@@ -48,7 +48,7 @@ tr:nth-child(odd) {
     display: flex;
     align-content: center;
     align-items: center;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 .plot {

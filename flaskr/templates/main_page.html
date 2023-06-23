@@ -8,36 +8,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body class="main-container">
-    <div class="tables">
-        <table id="xyz-table">
-            <thead>
-            <tr>
-                {% for header in header_xyz %}
-                <th>{{ header }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody id="xyz-body"></tbody>
-        </table>
-        <table id="max-table">
-            <thead>
-            <tr>
-                {% for header in header_max %}
-                <th>{{ header }}</th>
-                {% endfor %}
-            </tr>
-            </thead>
-            <tbody id="max-body"></tbody>
-        </table>
-        <div class="plots">
-            <h2 class="title">Plots</h2>
-            <img class="plot" src="data:image/png;base64,{{ plot_data1 }}" alt="Plot 1">
-            <img class="plot" src="data:image/png;base64,{{ plot_data2 }}" alt="Plot 2">
-            <img class="plot" id="plot-image" src="" alt="Plot">
+<!--    <div class="tables">-->
+<!--        <table id="max-table">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                {% for header in header_max %}-->
+<!--                <th>{{ header }}</th>-->
+<!--                {% endfor %}-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody id="max-body"></tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+    <h2 class="title">Plots</h2>
+    <div class="plots">
+
+<!--        <img class="plot" src="data:image/png;base64,{{ spo2_plot }}" alt="Plot 1">-->
+<!--        <img class="plot" src="data:image/png;base64,{{ temperature_plot }}" alt="Plot 2">-->
+        <div class="plot-section">
+            <img class="plot" id="temp-plot-image" src="" alt="Temp Plot">
+            <p class="warning" id="temp-warning"></p>
+        </div>
+        <div class="plot-section">
+            <img class="plot" id="spO2-plot-image" src="" alt="spO2 Plot">
+            <p class="warning" id="spO2-warning"></p>
+        </div>
+        <div class="plot-section">
+            <img class="plot" id="xyz-plot-image" src="" alt="XYZ Plot">
+            <p class="warning" id="xyz-warning"></p>
         </div>
     </div>
-
-
 
 </body>
 </html>

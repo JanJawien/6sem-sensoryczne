@@ -16,7 +16,7 @@ class DataProcessing:
     BASIC_TEMP_VALUE = 36.6
 
     def __init__(self):
-        with open('../flaskr/python_reader/data.pkl', 'rb') as file:
+        with open('../flaskr/python_reader/acc_data/data_oddech1.pkl', 'rb') as file:
             data = pickle.load(file)
             file.close()
 
@@ -29,7 +29,7 @@ class DataProcessing:
 
         self.x = ada_data[:, 2]
         self.y = ada_data[:, 3]
-        self.z = ada_data[:, 4]
+        self.z = ada_data[:, 4] - 9.8
 
         self.data_max = [self.lm35_temp, self.max_spo2, self.max_bpm]
         self.data_xyz = [self.x, self.y, self.z]
@@ -39,52 +39,30 @@ class DataProcessing:
                          range(len(self.data_xyz[0]))]
 
     def get_data(self):
-        return self.data_max, self.data_xyz
+        return self.max_bpm, self.max_spo2, self.lm35_temp, self.data_max, self.data_xyz
 
     def get_headers(self):
         return ['Temperature (LM35)', 'spO2 (MAX)', 'BPM (MAX)'], ['X', 'Y', 'Z']
 
     def get_plots(self):
-        mean_spo2 = np.mean(self.max_spo2)
-        std_spo2 = np.std(self.max_spo2)
-
+        mean_spo2 = np.mean(self.max_spo2[self.max_spo2 != -1])
+        std_spo2 = np.std(self.max_spo2[self.max_spo2 != -1])
         values = [mean_spo2, self.BASIC_SPO2_LEVEL]
         std = [std_spo2, 0]
 
-        # Data for the second plot
-        healthy_temp = [self.BASIC_TEMP_VALUE for _ in range(len(self.lm35_temp))]
-
-        plt.bar(range(len(values)), values, yerr=std, align='center', alpha=0.6)
-        plt.xlabel('X1')
-        plt.ylabel('SpO2 (%)')
-        plt.title('Level of SpO2')
-        plt.ylim(80, 100)
-        plt.xticks(range(len(values)), ['Measured value', 'Healthy value'])
-
-        # Save Plot 1 to a buffer
+        fig, ax = plt.subplots(1, 1)
+        ax.bar(range(len(values)), values, yerr=std, align='center', alpha=0.6)
+        ax.set_xlabel('X1')
+        ax.set_ylabel('SpO2 (%)')
+        ax.set_title('Level of SpO2')
+        ax.set_ylim(80, 100)
+        ax.set_xticks(range(len(values)), ['Measured value', 'Healthy value'])
         buffer1 = io.BytesIO()
-        plt.savefig(buffer1, format='png')
+        fig.savefig(buffer1, format='png')
         buffer1.seek(0)
         plot_data1 = base64.b64encode(buffer1.read()).decode()
-        plt.close()  # Close the plot to free up resources
+        plt.close(fig)
 
-        # Temperature values
-        plt.plot(range(len(self.lm35_temp)), self.lm35_temp, marker='o', label='Measured values')
-        plt.plot(range(len(healthy_temp)), healthy_temp, label='Healthy value')
-        plt.xlabel('Measurement')
-        plt.ylabel('Temperature')
-        plt.title('Temperature Values')
-        plt.xticks(range(len(self.lm35_temp)), [str(i) for i in range(len(self.lm35_temp))])
-        plt.ylim(min(36, int(min(self.lm35_temp) - 0.5)), max(38, int(max(self.lm35_temp) + 1)))
-        plt.legend()
 
-        # Save Plot 2 to a buffer
-        buffer2 = io.BytesIO()
-        plt.savefig(buffer2, format='png')
-        buffer2.seek(0)
-        plot_data2 = base64.b64encode(buffer2.read()).decode()
-        plt.close()  # Close the plot to free up resources
-
-        print(plot_data1)
 
         return plot_data1, plot_data2
