@@ -6,6 +6,10 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ url_for('static', filename='track_changes.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!--    -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-teal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
 </head>
 <body class="main-container">
 <!--    <div class="tables">-->
@@ -20,24 +24,59 @@
 <!--            <tbody id="max-body"></tbody>-->
 <!--        </table>-->
 <!--    </div>-->
-    <h2 class="title">Plots</h2>
-    <div class="plots">
+<!-- Header -->
+    <header class="w3-container w3-theme w3-padding" id="myHeader">
+      <div class="w3-center">
+      <h1 class="w3-xlarge w3-animate-bottom">MEASUREMENT RESULTS</h1>
+      </div>
+    </header>
 
-<!--        <img class="plot" src="data:image/png;base64,{{ spo2_plot }}" alt="Plot 1">-->
-<!--        <img class="plot" src="data:image/png;base64,{{ temperature_plot }}" alt="Plot 2">-->
-        <div class="plot-section">
-            <img class="plot" id="temp-plot-image" src="" alt="Temp Plot">
-            <p class="warning" id="temp-warning"></p>
-        </div>
-        <div class="plot-section">
-            <img class="plot" id="spO2-plot-image" src="" alt="spO2 Plot">
-            <p class="warning" id="spO2-warning"></p>
-        </div>
-        <div class="plot-section">
-            <img class="plot" id="xyz-plot-image" src="" alt="XYZ Plot">
-            <p class="warning" id="xyz-warning"></p>
-        </div>
+        <div class="w3-third">
+      <div class="w3-card w3-container" style="min-height:460px">
+          <p class="sensor">Czujnik temperatury ludzkiego ciała</p>
+          <img class="plot" id="temp-plot-image" src="" alt="Temp Plot">
+          <p class="warning" id="temp-warning"></p>
+      </div>
     </div>
+
+    <div class="w3-third">
+      <div class="w3-card w3-container" style="min-height:460px">
+          <p class="sensor">Pulsokrymetr</p>
+          <img class="plot" id="spO2-plot-image" src="" alt="spO2 Plot">
+          <p class="warning" id="spO2-warning"></p>
+      </div>
+    </div>
+
+    <div class="w3-third">
+      <div class="w3-card w3-container" style="min-height:460px">
+          <p class="sensor">Akcelerometr</p>
+          <img class="plot" id="xyz-plot-image" src="" alt="XYZ Plot">
+          <p class="warning" id="xyz-warning"></p>
+      </div>
+    </div>
+
+
+<!--    <h2 class="title">MEASUREMENT RESULTS</h2>-->
+<!--    <div class="plots">-->
+
+<!--&lt;!&ndash;        <img class="plot" src="data:image/png;base64,{{ spo2_plot }}" alt="Plot 1">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="plot" src="data:image/png;base64,{{ temperature_plot }}" alt="Plot 2">&ndash;&gt;-->
+<!--        <div class="plot-section">-->
+<!--            <img class="plot" id="temp-plot-image" src="" alt="Temp Plot">-->
+<!--            <p class="warning" id="temp-warning"></p>-->
+<!--        </div>-->
+<!--        <div class="plot-section">-->
+<!--            <img class="plot" id="spO2-plot-image" src="" alt="spO2 Plot">-->
+<!--            <p class="warning" id="spO2-warning"></p>-->
+<!--        </div>-->
+<!--        <div class="plot-section">-->
+<!--            <img class="plot" id="xyz-plot-image" src="" alt="XYZ Plot">-->
+<!--            <p class="warning" id="xyz-warning"></p>-->
+<!--        </div>-->
+<!--    </div>-->
+
+
+
 
 </body>
 </html>
