@@ -18,8 +18,9 @@ class MyApp:
         self.app.static_folder = 'static'
         self.data_processing = DataProcessing()
         self.max_bpm, self.max_spo2, self.lm35_temp, self.data_max, self.data_xyz = self.data_processing.get_data()
-        self.i_xyz = 0
-        self.i_max = 0
+        self.i_xyz = -25
+        self.i_temp = -15
+        self.i_spO2 = -15
 
         @self.app.route('/')
         def display_table_and_plot():
@@ -27,9 +28,12 @@ class MyApp:
 
         @self.app.route('/get_spO2_plot')
         def get_spo2_plot():
+            spo2, self.i_spO2 = self.get_values(self.max_spo2, 15, self.i_spO2, -1)
+            print(spo2)
+            print(spo2[spo2 != -1])
             error = False
-            mean_spo2 = np.mean(self.max_spo2[self.max_spo2 != -1])
-            std_spo2 = np.std(self.max_spo2[self.max_spo2 != -1])
+            mean_spo2 = np.mean(spo2[spo2 != -1])
+            std_spo2 = np.std(spo2[spo2 != -1])
             if np.isnan(mean_spo2):
                 mean_spo2 = 0
                 std_spo2 = 0
@@ -57,32 +61,35 @@ class MyApp:
 
         @self.app.route('/get_temp_plot')
         def get_temp_plot():
-            healthy_temp = [self.BASIC_TEMP_VALUE for _ in range(len(self.lm35_temp))]
+            data_temp, self.i_temp = self.get_values(self.lm35_temp, 15, self.i_temp)
+            healthy_temp = [self.BASIC_TEMP_VALUE for _ in range(len(data_temp))]
 
             fig, ax = plt.subplots(1, 1)
-            # Temperature values
-            ax.plot(range(len(self.lm35_temp)), self.lm35_temp, marker='o', label='Measured values')
-            ax.plot(range(len(healthy_temp)), healthy_temp, label='Healthy value')
-            ax.set_xlabel('Measurement')
-            ax.set_ylabel('Temperature')
-            ax.set_title('Temperature Values')
-            ax.set_xticks(range(len(self.lm35_temp)), [str(i) for i in range(len(self.lm35_temp))])
-            ax.set_ylim(min(36, int(min(self.lm35_temp) - 0.5)), max(38, int(max(self.lm35_temp) + 1)))
-            ax.legend()
+            try:
+                ax.plot(range(len(data_temp)), data_temp, marker='o', label='Measured values')
+                ax.plot(range(len(healthy_temp)), healthy_temp, label='Healthy value')
+                ax.set_xlabel('Measurement')
+                ax.set_ylabel('Temperature')
+                ax.set_title('Temperature Values')
+                ax.set_xticks(range(len(data_temp)), [str(i) for i in range(len(data_temp))])
+                ax.set_ylim(min(36, int(min(data_temp) - 0.5)), max(38, int(max(data_temp) + 1)))
+                ax.legend()
+            except:
+                print('waiting for data')
             buffer = io.BytesIO()
             fig.savefig(buffer, format='png')
             buffer.seek(0)
             plot = base64.b64encode(buffer.read()).decode()
             plt.close(fig)
-            data = {'healthy': self.BASIC_TEMP_VALUE, 'measured': np.mean(self.lm35_temp)}
+            data = {'healthy': self.BASIC_TEMP_VALUE, 'measured': np.mean(data_temp[data_temp != 0])}
 
             return jsonify(plot=plot, data=data)
 
         @self.app.route('/get_xyz_plot')
         def get_xyz_plot():
-            xyz_value = self.get_xyz_()
+            xyz_value, self.i_xyz = self.get_values(self.data_xyz, 25, self.i_xyz)
             std_values = np.std(xyz_value, axis=0)
-            std_values = {'x':std_values[0], 'y':std_values[0], 'z':std_values[0]}
+            std_values = {'x': std_values[0], 'y': std_values[0], 'z': std_values[0]}
             max_value = np.max(np.max(xyz_value, axis=0))
             min_value = np.min(np.min(xyz_value, axis=0))
 
@@ -101,23 +108,21 @@ class MyApp:
 
             return jsonify(plot=plot, std_values=std_values)
 
-    def get_max_(self):
-        values = self.data_max
-        values_len = len(self.data_max)
-        values = values[self.i_max % values_len: self.i_max % values_len + 15]
-        if values_len > 10:
-            self.i_max += 1
-        return values
+    def get_values(self, values, max_values, iterator, padding=0):
+        values_len = len(values)
+        values = values[max(0, iterator): min(iterator + max_values + 1, values_len)]
 
-    def get_xyz_(self):
-        values = self.data_xyz
-        values_len = len(self.data_xyz)
-        values = values[self.i_xyz % values_len: self.i_xyz % values_len + 15]
-        if values_len > 10:
-            self.i_xyz += 1
-        if self.i_xyz + 15 >= values_len:
-            self.i_xyz = 0
-        return values
+        current_length = len(values)
+        if current_length < max_values:
+            padding_needed = max_values - current_length
+            if iterator < max_values:
+                values = np.pad(values, (padding_needed, 0), mode='constant', constant_values=padding)
+            else:
+                values = np.pad(values, (0, padding_needed), mode='constant', constant_values=padding)
+        iterator += 1
+        if iterator >= values_len:
+            iterator = -max_values
+        return values, iterator
 
     def run(self):
         self.app.static_folder = 'static'
