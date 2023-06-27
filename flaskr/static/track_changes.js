@@ -28,7 +28,7 @@ function updateXYZPlot() {
                 }
             });
         }
-        setInterval(updateXYZPlot, 100);
+        setInterval(updateXYZPlot, 20);
 
 function updateSpO2Plot() {
             $.ajax({

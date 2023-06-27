@@ -18,7 +18,7 @@ class MyApp:
         self.app.static_folder = 'static'
         self.data_processing = DataProcessing()
         self.max_bpm, self.max_spo2, self.lm35_temp, self.data_max, self.data_xyz = self.data_processing.get_data()
-        self.i_xyz = -25
+        self.i_xyz = -35
         self.i_temp = -15
         self.i_spO2 = -15
 
@@ -87,7 +87,7 @@ class MyApp:
 
         @self.app.route('/get_xyz_plot')
         def get_xyz_plot():
-            xyz_value, self.i_xyz = self.get_values(self.data_xyz, 25, self.i_xyz)
+            xyz_value, self.i_xyz = self.get_values(self.data_xyz, 35, self.i_xyz)
             std_values = np.std(xyz_value, axis=0)
             std_values = {'x': std_values[0], 'y': std_values[0], 'z': std_values[0]}
             max_value = np.max(np.max(xyz_value, axis=0))
