@@ -16,7 +16,7 @@ class DataProcessing:
     BASIC_TEMP_VALUE = 36.6
 
     def __init__(self):
-        with open('../flaskr/python_reader/acc_data/data_dlugie2.pkl', 'rb') as file:
+        with open('flaskr/python_reader/acc_data/data_kaszel2.pkl', 'rb') as file:
             data = pickle.load(file)
             file.close()
 
